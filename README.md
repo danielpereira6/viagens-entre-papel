@@ -1,6 +1,7 @@
 # viagens-entre-papel
 
 #### Project structure
+```
 viagens-entre-papel/
 ├── frontend/                 # React app
 │   ├── src/
@@ -22,8 +23,9 @@ viagens-entre-papel/
 │   └── workflows/            # CI/CD pipelines
 ├── docker-compose.yml        # Local dev environment
 └── README.md
+```
 
-═══════════════════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════
 
 🚀 QUICK START
 
@@ -39,4 +41,4 @@ Frontend (new terminal):
 
 Open: http://localhost:5173
 
-═══════════════════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════
