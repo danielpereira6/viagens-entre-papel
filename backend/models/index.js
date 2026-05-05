@@ -7,4 +7,7 @@ const initModels = () => {
   // relations later
 };
 
-module.exports = { sequelize, initModels, User };
+// Sync database
+sequelize.sync();
+
+module.exports = { sequelize, initModels, User, Book };

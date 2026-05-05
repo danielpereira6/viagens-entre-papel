@@ -1,20 +1,31 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const authRoutes = require("./routes/authRoutes");
-require("dotenv").config();
 const { sequelize } = require("./models");
+
+const authRoutes = require("./routes/authRoutes");
+const bookRoutes = require("./routes/book.routes.js");
+
 const app = express();
-app.use(cors());
+
+// configure CORS
+app.use(
+    cors({
+        origin: true,
+        // credentials: true,
+    })
+)
 
 // Middleware
 app.use(express.json({ limit: '50mb' })); // Allow large base64 images
 app.use(express.urlencoded({ limit: '50mb' }));
 
 // Routes
-app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
+app.use("/book", bookRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 

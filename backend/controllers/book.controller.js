@@ -1,9 +1,9 @@
-import Book from '../models/Book';
+const { Book } = require("../models");
 
 // GET all published books with pagination and filtering
-export const getAllBooks = async (req, res) => {
+const getAllBooks2 = async (req, res) => {
   try {
-    const { page, limit, offset } = req.body;
+    const { page = 1, limit = -1, offset } = req.body;
     const { category, minRating, search, sortBy } = req.query;
 
     // Build where clause for filtering
@@ -50,8 +50,30 @@ export const getAllBooks = async (req, res) => {
   }
 };
 
+// GET ALL (with optional category filter)
+const getAllBooks = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    const where = {};
+    if (category) {
+      where.category = category;
+    }
+
+    const books = await Book.findAll({
+      where,
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json(books);
+  } catch (error) {
+    console.error("Get books error:", error);
+    res.status(500).json({ error: "Failed to fetch books" });
+  }
+};
+
 // GET single book by ID (increments view count)
-export const getBookById = async (req, res) => {
+const getBookById = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
 
@@ -76,7 +98,7 @@ export const getBookById = async (req, res) => {
 };
 
 // CREATE book (admin only)
-export const createBook = async (req, res) => {
+const createBook = async (req, res) => {
   try {
     const { title, author, category, rating, opinion, coverImage, isPublished } = req.body;
 
@@ -118,7 +140,7 @@ export const createBook = async (req, res) => {
 };
 
 // UPDATE book (admin only)
-export const updateBook = async (req, res) => {
+const updateBook = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
 
@@ -152,7 +174,7 @@ export const updateBook = async (req, res) => {
 };
 
 // DELETE book (admin only)
-export const deleteBook = async (req, res) => {
+const deleteBook = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
 
@@ -170,7 +192,7 @@ export const deleteBook = async (req, res) => {
 };
 
 // GET books by category
-export const getCategories = async (req, res) => {
+const getCategories = async (req, res) => {
   try {
     const categories = await Book.findAll({
       where: { isPublished: true },
@@ -187,3 +209,12 @@ export const getCategories = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch categories' });
   }
 };
+
+module.exports = {
+  getAllBooks,
+  getBookById,
+  createBook,
+  updateBook,
+  deleteBook,
+  getCategories
+}
