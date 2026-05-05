@@ -1,5 +1,5 @@
 import { globalData } from "../api";
-const URL = globalData.apiUrl + ':' + globalData.backendPort
+const URL = globalData.apiUrl
 
 export async function addBook(data) {
   try {
