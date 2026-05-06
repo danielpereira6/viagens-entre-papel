@@ -1,6 +1,6 @@
-const sequelize = require("../config/database");
+const sequelize = require("../config/postgres");
 
-const User = require("./User");
+// const User = require("./User");
 const Book = require("./Book");
 
 const initModels = () => {
@@ -10,4 +10,4 @@ const initModels = () => {
 // Sync database
 sequelize.sync();
 
-module.exports = { sequelize, initModels, User, Book };
+module.exports = { sequelize, initModels, Book };
