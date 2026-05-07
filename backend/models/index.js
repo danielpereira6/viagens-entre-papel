@@ -1,7 +1,7 @@
 const sequelize = require("../config/postgres");
 
 // const User = require("./User");
-const Book = require("./Book");
+const Book = require("./Books.pg");
 
 const initModels = () => {
   // relations later

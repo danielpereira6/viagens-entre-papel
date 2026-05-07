@@ -1,13 +1,13 @@
-// const { Sequelize } = require("sequelize");
-const { Sequelize } = require('@sequelize/core');
-const { PostgresDialect } = require('@sequelize/postgres');
+const { Sequelize } = require("sequelize");
+// const { Sequelize } = require('@sequelize/core');
+// const { PostgresDialect } = require('@sequelize/postgres');
 
 // PostgreSQL connection configuration
 const sequelize = new Sequelize({
-    dialect: PostgresDialect,
+    dialect: 'postgres',
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    user: process.env.DB_USER,
+    username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 
@@ -19,24 +19,24 @@ const sequelize = new Sequelize({
         idle: 10000,
     },
 
-    //   // SSL for production (Render provides SSL)
-    //   dialectOptions: process.env.NODE_ENV === "production" ? {
+      // SSL for production (Render provides SSL)
+    //   dialectOptions: process.env.NODE_ENV === "prod" ? {
     //     ssl: {
     //       require: true,
     //       rejectUnauthorized: false,
     //     },
     //   } : {},
 
-    //   logging: process.env.NODE_ENV === "development" ? console.log : false,
+      logging: process.env.NODE_ENV === "dev" ? console.log : false,
 });
 
 // Test the connection
 sequelize.authenticate()
     .then(() => {
-        console.log("✅ PostgreSQL connection successful");
+        console.log("Connection has been established successfully.");
     })
     .catch(err => {
-        console.error("❌ Unable to connect to PostgreSQL:", err);
+        console.error("Unable to connect to the database:", err);
     });
 
 module.exports = sequelize;
