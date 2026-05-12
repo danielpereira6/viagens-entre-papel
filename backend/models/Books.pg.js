@@ -35,11 +35,11 @@ const Book = sequelize.define(
       },
     },
     opinion: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     coverImage: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     viewCount: {

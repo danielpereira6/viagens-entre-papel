@@ -2,12 +2,15 @@ const sequelize = require("../config/postgres");
 
 // const User = require("./User");
 const Book = require("./Books.pg");
-
-const initModels = () => {
-  // relations later
-};
+const Trip = require("./Trip.pg");
+const Love = require("./Love.pg");
 
 // Sync database
 sequelize.sync();
 
-module.exports = { sequelize, initModels, Book };
+module.exports = { 
+  sequelize,
+  Book,
+  Trip,
+  Love
+};

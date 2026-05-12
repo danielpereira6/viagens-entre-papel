@@ -1,25 +1,27 @@
-const bookRouter = require('express').Router()
+const bookRouter = require('express').Router();
+const auth = require("../config/authenticateToken");
+
 const {
   createBook,
   getAllBooks,
   getBookById,
   updateBook,
   deleteBook,
-//   incrementViewCount,
+  // incrementViewCount,
 } = require("../controllers/book.controller.js");
 
 // Create
-bookRouter.post("/", createBook);
+bookRouter.post("/", auth, createBook);
 
 // Read
 bookRouter.get("/", getAllBooks);
 bookRouter.get("/:id", getBookById);
 
 // Update
-bookRouter.put("/:id", updateBook);
+bookRouter.put("/:id", auth, updateBook);
 
 // Delete
-bookRouter.delete("/:id", deleteBook);
+bookRouter.delete("/:id", auth, deleteBook);
 
 // Custom
 // bookRouter.patch("/:id/view", incrementViewCount);

@@ -2,9 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { sequelize } = require("./models");
+const jwt = require("jsonwebtoken");
 
 const authRoutes = require("./routes/authRoutes");
-const bookRoutes = require("./routes/book.routes.js");
+const bookRoutes = require("./routes/book.routes");
+const travelRoutes = require("./routes/travel.routes");
+const loveRoutes = require("./routes/love.routes");
 
 const app = express();
 
@@ -23,10 +26,18 @@ app.use(express.urlencoded({ limit: '50mb' }));
 // Routes
 app.use("/auth", authRoutes);
 app.use("/book", bookRoutes);
+app.use("/trip", travelRoutes);
+app.use("/love", loveRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Token generate
+app.get("/generate-token", (req, res) => {
+  const token = jwt.sign({ id: 1 }, process.env.JWT_SECRET);
+  res.json({ token });
 });
 
 // 404 handler
