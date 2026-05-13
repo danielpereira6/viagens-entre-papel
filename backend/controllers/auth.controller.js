@@ -4,7 +4,7 @@ const { User } = require("../models");
 
 const register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role = "user" } = req.body;
 
     const hashed = await bcrypt.hash(password, 10);
 
@@ -12,6 +12,7 @@ const register = async (req, res) => {
       username,
       email,
       password: hashed,
+      role
     });
 
     res.json(user);
@@ -32,7 +33,14 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
 
-    res.json({ token });
+    res.json({
+      user: {
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+      token
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

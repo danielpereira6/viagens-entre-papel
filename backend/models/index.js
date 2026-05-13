@@ -1,6 +1,6 @@
 const sequelize = require("../config/postgres");
 
-// const User = require("./User");
+const User = require("./User");
 const Book = require("./Books.pg");
 const Trip = require("./Trip.pg");
 const Love = require("./Love.pg");
@@ -10,6 +10,7 @@ sequelize.sync();
 
 module.exports = { 
   sequelize,
+  User,
   Book,
   Trip,
   Love

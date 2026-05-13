@@ -1,5 +1,5 @@
 const bookRouter = require('express').Router();
-const auth = require("../config/authenticateToken");
+const { auth } = require("../config/auth");
 
 const {
   createBook,

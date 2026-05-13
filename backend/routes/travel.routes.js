@@ -1,5 +1,5 @@
-const router = require("express").Router();
-const auth = require("../config/authenticateToken");
+const travelRouter = require("express").Router();
+const { auth } = require("../config/auth");
 
 const {
   getAllTrips,
@@ -10,10 +10,10 @@ const {
 } = require("../controllers/travel.controller");
 
 // CRUD
-router.get("/", getAllTrips);
-router.get("/:id", getTripById);
-router.post("/", auth, createTrip);
-router.put("/:id", auth, updateTrip);
-router.delete("/:id", auth, deleteTrip);
+travelRouter.get("/", getAllTrips);
+travelRouter.get("/:id", getTripById);
+travelRouter.post("/", auth, createTrip);
+travelRouter.put("/:id", auth, updateTrip);
+travelRouter.delete("/:id", auth, deleteTrip);
 
-module.exports = router;
+module.exports = travelRouter;

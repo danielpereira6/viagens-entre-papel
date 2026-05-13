@@ -4,6 +4,24 @@ const bcrypt = require("bcrypt");
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRY = process.env.JWT_EXPIRY;
 
+const auth = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({ error: "Access token required" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(403).json({ error: "No authorization: Invalid token" });
+  }
+};
+
 /**
  * Generate JWT token
  * @param {Object} payload - Data to encode in token
@@ -56,6 +74,7 @@ const generateRefreshToken = (payload) => {
 };
 
 module.exports = {
+  auth,
   generateToken,
   verifyToken,
   hashPassword,

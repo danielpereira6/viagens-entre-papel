@@ -4,7 +4,9 @@ const cors = require("cors");
 const { sequelize } = require("./models");
 const jwt = require("jsonwebtoken");
 
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+
 const bookRoutes = require("./routes/book.routes");
 const travelRoutes = require("./routes/travel.routes");
 const loveRoutes = require("./routes/love.routes");
@@ -25,6 +27,8 @@ app.use(express.urlencoded({ limit: '50mb' }));
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+
 app.use("/book", bookRoutes);
 app.use("/trip", travelRoutes);
 app.use("/love", loveRoutes);
