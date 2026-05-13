@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { theme } from '../styles';
+import { useAuth } from '../context/AuthContext';
 
 interface Trip {
   id: string;
@@ -9,6 +10,7 @@ interface Trip {
 }
 
 export default function TripsPage() {
+  const { isAdmin } = useAuth();
   const [trips, setTrips] = useState<Trip[]>([
     {
       id: '1',
@@ -323,6 +325,7 @@ export default function TripsPage() {
       color: ${theme.colors.muted};
       line-height: 1.65;
       max-width: 500px;
+      margin: auto;
     }
 
     .page-rule {
@@ -351,9 +354,10 @@ export default function TripsPage() {
       <div className="page-rule"></div>
 
       <div className="page-body">
-        <button className="add-btn" onClick={() => setIsModalOpen(true)}>
-          + Adicionar viagem
-        </button>
+        {isAdmin &&
+          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+            + Adicionar viagem
+          </button>}
 
         {trips.length === 0 ? (
           <div className="empty-state">
@@ -367,12 +371,13 @@ export default function TripsPage() {
                 {trip.date && <p className="story-date">{trip.date}</p>}
                 <h3 className="story-title">{trip.title}</h3>
                 <p className="story-body">{trip.description}</p>
-                <button
-                  className="story-del"
-                  onClick={() => setTrips(trips.filter(t => t.id !== trip.id))}
-                >
-                  remover
-                </button>
+                {isAdmin &&
+                  <button
+                    className="story-del"
+                    onClick={() => setTrips(trips.filter(t => t.id !== trip.id))}
+                  >
+                    remover
+                  </button>}
               </div>
             ))}
           </div>

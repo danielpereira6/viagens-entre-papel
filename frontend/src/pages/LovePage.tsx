@@ -1,28 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { theme } from '../styles';
+import { useAuth } from '../context/AuthContext';
+import { getQuotes, addQuote } from '../services/love';
 
 interface LovePost {
   id: string;
-  title: string;
-  content: string;
+  // title: string;
+  // content: string;
+  author: string;
+  quote: string;
 }
 
 export default function LovePage() {
+  const { isAdmin } = useAuth();
   const [posts, setPosts] = useState<LovePost[]>([
     {
       id: '1',
-      title: 'Amar é encontrar',
-      content: 'Amar é encontrar na outra pessoa a tua palavra favorita. Aquela que guarda tudo o que nunca conseguiste dizer com clareza, mas que ele percebe à primeira.',
+      author: 'Diário',
+      quote: 'Amar é encontrar na outra pessoa a tua palavra favorita. Aquela que guarda tudo o que nunca conseguiste dizer com clareza, mas que ele percebe à primeira.',
     },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ title: '', content: '' });
+  const [formData, setFormData] = useState({ author: '', quote: '' });
+
+
+  async function getQuotesFromDB() {
+    const loadedPost = await getQuotes();
+    setPosts(loadedPost);
+  }
+
+  useEffect(() => {
+    getQuotesFromDB();
+  }, []);
 
   const handleAddPost = () => {
-    if (formData.title && formData.content) {
-      setPosts([...posts, { id: Date.now().toString(), ...formData }]);
-      setFormData({ title: '', content: '' });
+    if (formData.author && formData.quote) {
+      // setPosts([...posts, { id: Date.now().toString(), ...formData }]);
+      console.log('new quote', formData)
+      addQuote(formData);
+
+      setFormData({ author: '', quote: '' });
       setIsModalOpen(false);
     }
   };
@@ -346,6 +364,7 @@ export default function LovePage() {
       color: ${theme.colors.muted};
       line-height: 1.65;
       max-width: 500px;
+      margin: auto;
     }
 
     .page-rule {
@@ -393,9 +412,10 @@ export default function LovePage() {
             <p className="amor-qauthor">— do diário</p>
             <br />
             <br />
-            <button className="add-btn" onClick={() => setIsModalOpen(true)}>
-              + Adicionar texto
-            </button>
+            {isAdmin &&
+              <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+                + Adicionar texto
+              </button>}
           </div>
 
           <div>
@@ -407,14 +427,15 @@ export default function LovePage() {
               <div className="stories">
                 {posts.map((post) => (
                   <div key={post.id} className="story-card">
-                    <h3 className="story-title">{post.title}</h3>
-                    <p className="story-body">{post.content}</p>
-                    <button
-                      className="story-del"
-                      onClick={() => setPosts(posts.filter(p => p.id !== post.id))}
-                    >
-                      remover
-                    </button>
+                    <h3 className="story-title">{post.author}</h3>
+                    <p className="story-body">{post.quote}</p>
+                    {isAdmin &&
+                      <button
+                        className="story-del"
+                        onClick={() => setPosts(posts.filter(p => p.id !== post.id))}
+                      >
+                        remover
+                      </button>}
                     <div className="story-divider"></div>
                   </div>
                 ))}

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { theme } from '../styles';
+import { useAuth } from '../context/AuthContext';
 
 export default function AboutMePage() {
+  const { isAdmin } = useAuth();
   const [name, setName] = useState('Cátia');
   const [bio, setBio] = useState(`Sou leitora compulsiva, viajante apaixonada e acredito que o amor se encontra em todo o lado — nas páginas de um livro, numa esplanada em Paris ou num passeio de moliceiro em Aveiro.
 
@@ -370,7 +372,8 @@ Bem-vinda — ou bem-vindo — ao meu cantinho.`);
               <span className="portrait-ph">C</span>
             </div>
             <div className="portrait-frame"></div>
-            <span className="portrait-hint">Clica para adicionar a tua foto</span>
+            {isAdmin &&
+            <span className="portrait-hint">Clica para adicionar a tua foto</span>}
           </div>
 
           <div>

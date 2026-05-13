@@ -6,15 +6,22 @@ import TripsPage from './pages/TripsPage';
 import LovePage from './pages/LovePage';
 import AboutPage from './pages/AboutPage';
 import AuthPage from './pages/AuthPage';
+import { useAuth } from './context/AuthContext';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'livros' | 'viagens' | 'amor' | 'sobre' | 'login'>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const handleNavClick = (page: typeof currentPage) => {
-    setCurrentPage(page);
-    setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (page === "login" && user) {
+      logout();
+    }
+    else {
+      setCurrentPage(page);
+      setMobileMenuOpen(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const logoUrl = '/images/vep-logo.png'
@@ -80,7 +87,9 @@ export default function App() {
               onClick={() => handleNavClick('login')}
               className={currentPage === 'login' ? 'active' : ''}
             >
-              login
+              <i>
+                {(user && user.user) ? user.user.username : "login"}
+              </i>
             </a>
           </li>
         </ul>

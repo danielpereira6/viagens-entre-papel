@@ -1,4 +1,5 @@
 import { theme } from '../styles';
+// import { Footer } from "../components/Footer";
 
 interface HomePageProps {
   onNavigate: (page: 'home' | 'livros' | 'viagens' | 'amor' | 'sobre') => void;

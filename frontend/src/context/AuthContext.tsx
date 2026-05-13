@@ -1,9 +1,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 type User = {
-  name: string;
-  token: string;
-  isAdmin: boolean;
+  user: {
+    username: string;
+    token: string;
+    role: string;
+  },
+  token: string
 };
 
 type AuthContextType = {
@@ -18,28 +21,33 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [logged, setLogged] = useState<User | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
-    if (stored) setUser(JSON.parse(stored));
+    if (stored) setLogged(JSON.parse(stored));
   }, []);
 
   const login = (userData: User) => {
-    setUser(userData);
+    setLogged(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+
+    // Back to HOME
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 300);
   };
 
   const logout = () => {
-    setUser(null);
+    setLogged(null);
     localStorage.removeItem("user");
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        isAdmin: user?.isAdmin ?? false,
+        user: logged,
+        isAdmin: (logged?.user?.role == 'admin') ? true : false,
         login,
         logout,
       }}

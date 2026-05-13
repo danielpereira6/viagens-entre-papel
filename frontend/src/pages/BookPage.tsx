@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { theme } from '../styles';
 import { useAuth } from '../context/AuthContext';
-import { getBooks, addBook } from '../services/books';
+import { getBooks, addBook } from '../services/book';
 
 interface Book {
   id: string;
@@ -125,6 +125,7 @@ export default function BooksPage() {
       color: ${theme.colors.muted};
       line-height: 1.65;
       max-width: 500px;
+      margin: auto;
     }
 
     .page-rule {
