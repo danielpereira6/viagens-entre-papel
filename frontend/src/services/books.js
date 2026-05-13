@@ -1,5 +1,6 @@
 import { globalData } from "../api";
 const URL = globalData.apiUrl
+const token = globalData.apiToken
 
 export async function addBook(data) {
   try {
@@ -7,6 +8,7 @@ export async function addBook(data) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         title: data.title,
@@ -28,7 +30,8 @@ export async function addBook(data) {
 export async function getBooks() {
   try {
     const response = await fetch(`${URL}/book`);
-    return await response.json();
+    const res = await response.json();
+    return res
   } catch (error) {
     console.error("Error fetching books:", error);
   }
@@ -49,6 +52,7 @@ export async function updateBook(id, data) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         title: data.title,
@@ -71,6 +75,9 @@ export async function deleteBook(id) {
   try {
     const response = await fetch(`${URL}/book/${id}`, {
       method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
     });
 
     return await response.json();

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { theme } from '../styles';
 import { useAuth } from '../context/AuthContext';
-import { addBook } from '../services/books';
+import { getBooks, addBook } from '../services/books';
 
 interface Book {
   id: string;
@@ -14,31 +14,7 @@ interface Book {
 
 export default function BooksPage() {
   const { isAdmin } = useAuth();
-  const [books, setBooks] = useState<Book[]>([
-    {
-      id: '1',
-      title: 'The Midnight Library',
-      author: 'Matt Haig',
-      category: 'Fiction',
-      rating: 5,
-      opinion: 'A beautiful exploration of life choices and second chances.',
-    },
-    {
-      id: '2',
-      title: 'One Hundred Years of Solitude',
-      author: 'Gabriel García Márquez',
-      category: 'Magic Realism',
-      rating: 5,
-      opinion: 'A masterpiece of magical realism.',
-    },
-    {
-      id: '3',
-      title: 'The Seven Husbands of Evelyn Hugo',
-      author: 'Taylor Jenkins Reid',
-      category: 'Fiction',
-      rating: 4,
-    },
-  ]);
+  const [books, setBooks] = useState<Book[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,19 +25,34 @@ export default function BooksPage() {
     opinion: '',
   });
 
+  async function getBooksFromDB() {
+    const loadedBooks = await getBooks();
+    setBooks(loadedBooks);
+  }
+
+  useEffect(() => {
+    getBooksFromDB();
+  }, []);
+
   const handleAddBook = () => {
     if (formData.title && formData.author && formData.category) {
-      setBooks([
-        ...books,
-        {
-          id: Date.now().toString(),
-          ...formData,
-        },
-      ]);
+      // setBooks([
+      //   ...books,
+      //   {
+      //     id: Date.now().toString(),
+      //     ...formData,
+      //   },
+      // ]);
+
+      console.log('new book', formData)
+      addBook(formData);
+
       setFormData({ title: '', author: '', category: '', rating: 0, opinion: '' });
       setIsModalOpen(false);
-      console.log('new book', formData)
-      addBook(formData)
+
+      setTimeout(() => {
+        getBooksFromDB();
+      }, 1000);
     }
   };
 
