@@ -7,7 +7,11 @@ const Love = sequelize.define("Love", {
     primaryKey: true,
     autoIncrement: true,
   },
-  quote: {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  content: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -20,7 +24,7 @@ const Love = sequelize.define("Love", {
     defaultValue: true,
   },
 }, {
-  tableName: "love_quotes",
+  tableName: "love",
   timestamps: true,
 });
 

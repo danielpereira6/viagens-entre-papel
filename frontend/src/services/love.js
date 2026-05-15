@@ -2,7 +2,7 @@ import { globalData } from "../api";
 const URL = globalData.apiUrl
 const token = globalData.apiToken
 
-export async function addQuote(data) {
+export async function addPost(data) {
   try {
     const response = await fetch(`${URL}/love`, {
       method: "POST",
@@ -12,37 +12,38 @@ export async function addQuote(data) {
       },
       body: JSON.stringify({
         author: data.author,
-        quote: data.quote,
+        title: data.title,
+        content: data.content,
         isPublished: data.isPublished ?? false,
       }),
     });
 
     return await response.json();
   } catch (error) {
-    console.error("Error adding book:", error);
+    console.error("Error adding post:", error);
   }
 }
 
-export async function getQuotes() {
+export async function getPosts() {
   try {
     const response = await fetch(`${URL}/love`);
     const res = await response.json();
     return res
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error("Error fetching posts:", error);
   }
 }
 
-export async function getQuote(id) {
+export async function getPost(id) {
   try {
     const response = await fetch(`${URL}/love/${id}`);
     return await response.json();
   } catch (error) {
-    console.error("Error fetching book:", error);
+    console.error("Error fetching post:", error);
   }
 }
 
-export async function updateQuote(id, data) {
+export async function updatePost(id, data) {
   try {
     const response = await fetch(`${URL}/love/${id}`, {
       method: "PUT",
@@ -52,18 +53,19 @@ export async function updateQuote(id, data) {
       },
       body: JSON.stringify({
         author: data.author,
-        quote: data.quote,
+        title: data.title,
+        content: data.content,
         isPublished: data.isPublished,
       }),
     });
 
     return await response.json();
   } catch (error) {
-    console.error("Error updating book:", error);
+    console.error("Error updating post:", error);
   }
 }
 
-export async function deleteQuote(id) {
+export async function deletePost(id) {
   try {
     const response = await fetch(`${URL}/love/${id}`, {
       method: "DELETE",

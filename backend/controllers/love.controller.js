@@ -3,87 +3,90 @@ const { Love } = require("../models");
 // GET ALL
 const getAllLove = async (req, res) => {
   try {
-    const quotes = await Love.findAll({
+    const posts = await Love.findAll({
       order: [["createdAt", "DESC"]],
     });
 
-    res.json(quotes);
+    res.json(posts);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch quotes" });
+    res.status(500).json({ error: "Failed to fetch posts" });
   }
 };
 
 // GET ONE
 const getLoveById = async (req, res) => {
   try {
-    const quote = await Love.findByPk(req.params.id);
+    const post = await Love.findByPk(req.params.id);
 
-    if (!quote) {
-      return res.status(404).json({ error: "Quote not found" });
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    res.json(quote);
+    res.json(post);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch quote" });
+    res.status(500).json({ error: "Failed to fetch post" });
   }
 };
 
 // CREATE
 const createLove = async (req, res) => {
   try {
-    const { quote, author, isPublished } = req.body;
+    const { content, title, author, isPublished } = req.body;
 
-    if (!quote) {
-      return res.status(400).json({ error: "Quote is required" });
+    if (!title || !content) {
+      return res.status(400).json({ error: "Title and content is required" });
     }
-
-    const newQuote = await Love.create({
-      quote: quote.trim(),
-      author: author?.trim(),
-      isPublished: isPublished ?? true,
+    
+    const newPost = await Love.create({
+      title: title,
+      content: content,
+      author: author,
+      isPublished: isPublished ?? false,
     });
 
-    res.status(201).json(newQuote);
+    res.status(201).json(newPost);
   } catch (err) {
-    res.status(500).json({ error: "Failed to create quote" });
+    console.log(err)
+    res.status(500).json({ error: "Failed to create post" });
   }
 };
 
 // UPDATE
 const updateLove = async (req, res) => {
   try {
-    const quote = await Love.findByPk(req.params.id);
+    const post = await Love.findByPk(req.params.id);
 
-    if (!quote) {
-      return res.status(404).json({ error: "Quote not found" });
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    const { quote: text, author, isPublished } = req.body;
+    const { content, title, author, isPublished } = req.body;
 
-    if (text) quote.quote = text.trim();
-    if (author !== undefined) quote.author = author?.trim();
-    if (isPublished !== undefined) quote.isPublished = isPublished;
+    if (title) post.title = title.trim();
+    if (content) post.content = content.trim();
+    if (author !== undefined) post.author = author?.trim();
+    if (isPublished !== undefined) post.isPublished = isPublished;
 
-    await quote.save();
-    res.json(quote);
+    await post.save();
+    res.json(post);
   } catch (err) {
-    res.status(500).json({ error: "Failed to update quote" });
+    res.status(500).json({ error: "Failed to update post" });
   }
 };
 
 // DELETE
 const deleteLove = async (req, res) => {
   try {
-    const quote = await Love.findByPk(req.params.id);
+    const post = await Love.findByPk(req.params.id);
 
-    if (!quote) {
-      return res.status(404).json({ error: "Quote not found" });
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    await quote.destroy();
+    await post.destroy();
     res.status(204).send();
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete quote" });
+    res.status(500).json({ error: "Failed to delete post" });
   }
 };
 
