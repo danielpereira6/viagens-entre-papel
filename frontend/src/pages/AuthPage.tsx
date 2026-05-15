@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { loginUser } from '../services/user';
 
@@ -144,7 +144,7 @@ export default function AuthPage() {
 
       if (!data) return
 
-      localStorage.setItem('user', data);
+      if (data.error) return setError(data.error);
 
       // Update context
       login(data);
@@ -169,11 +169,17 @@ export default function AuthPage() {
         <span className="lp-sub">Livros · Viagens · Amor</span>
 
         <input
+          name="lp-input"
           className="lp-input"
           type="password"
           placeholder="Password de edição"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              handleLogin();
+            }
+          }}
         />
 
         <button
