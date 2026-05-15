@@ -140,7 +140,7 @@ export default function AuthPage() {
     setIsLoading(true);
 
     try {
-      const data = loginUser(password);
+      const data = await loginUser(password);
 
       if (!data) return
 
